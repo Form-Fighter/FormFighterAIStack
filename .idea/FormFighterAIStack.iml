@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/components/pango_core/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/components/pango_python/pybind11/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/components/pango_vars/include/pangolin/var" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/components/pango_vars/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/components/pango_video/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/scripts/vcpkg/ports/chromium-base/res/build_overrides" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/Pangolin/scripts/vcpkg/scripts/buildsystems" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/build" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/dpvo.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/third-party/eigen-3.4.0/Eigen/src/Core" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/DPVO/third-party/eigen-3.4.0/bench/btl/data" />
+      <excludeFolder url="file://$MODULE_DIR$/WHAM/third-party/ViTPose/mmpose.egg-info" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.9 (motionbert-meta-sapiens)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="py.test" />
+  </component>
+</module>
