@@ -76,6 +76,11 @@ class Network(nn.Module):
         from loguru import logger
         logger.info(f"Output Joints: {self.output.joints}")
         logger.info(f"Output Vertices: {self.output.vertices}")
+
+        # Save joints and vertices in numpy arrays
+        np.save("joints.npy",self.output.joints.cpu().numpy())
+        np.save("vertices.npy",self.output.vertices.cpu().numpy())
+
         
         # Feet location in global coordinate
         root_world, trans = rollout_global_motion(self.pred_root, self.pred_vel)

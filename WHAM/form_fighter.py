@@ -21,6 +21,8 @@ from lib.models.preproc.detector import DetectionModel
 from lib.models.preproc.extractor import FeatureExtractor
 from lib.models.smplify import TemporalSMPLify
 
+from statics import *
+
 try:
     from lib.models.preproc.slam import SLAMModel
 
@@ -39,6 +41,7 @@ def run(cfg,
         save_pkl=False,
         visualize=False,
         run_smplify=False):
+
     cap = cv2.VideoCapture(video)
     assert cap.isOpened(), f'Failed to load video file {video}'
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -148,7 +151,7 @@ def run(cfg,
 
         # if False:
         if run_smplify:
-            smplify = TemporalSMPLify(smpl, img_w=width, img_h=height, device=cfg.DEVICE)
+            smplify = TemporalSMPLify(network.smpl, img_w=width, img_h=height, device=cfg.DEVICE)
             input_keypoints = dataset.tracking_results[_id]['keypoints']
             pred = smplify.fit(pred, input_keypoints, **kwargs)
 
@@ -185,10 +188,69 @@ def run(cfg,
         with torch.no_grad():
             run_vis_on_demo(cfg, video, results, output_pth, network.smpl, vis_global=run_global)
 
+    joints = np.load('joints.npy')
+    acceleration_list = []
+    for frame, joint in enumerate(joints):
+        frame_data = joint
 
-if __name__ == '__main__':
+        forward_direction = calculate_forward_direction(frame_data)
 
-    VIDEO_PATH = "examples/test16.mov"
+        phase = ''
+        acceleration = 'N/A'
+        if frame > 7:
+            acceleration = calculate_acceleration(joints[frame-7:frame], 9, forward_direction)
+            acceleration_list.append(acceleration)
+            averaged_acceleration = np.mean(acceleration_list)
+
+            if averaged_acceleration > 0:
+                phase = "Extension"
+            elif averaged_acceleration < 0:
+                phase = "Retraction"
+            else:
+                phase = ""
+
+        stance = detect_stance(frame_data, forward_direction)
+        # # Update text label for frame and highlighted joint
+        # is_in_guard_check = is_in_guard_phase(frame_data)
+        # is_in_guard = "Guard position" if is_in_guard_check is True else phase
+        #
+        # guard_feedback = 'Guard feedback:'
+        #
+        # if is_in_guard_check:
+        #     # Hands above shoulders check
+        #     if check_guard_hands_above_shoulders(frame_data):
+        #         guard_feedback += 'Hands above shoulders'
+        #     else:
+        #         guard_feedback += 'Hands not above shoulders'
+        #
+        #     # Back leg at 45 degrees check
+        #     back_leg_check = check_back_leg_angle(frame_data, stance)
+        #     if back_leg_check:
+        #         guard_feedback += ', Back leg at 45 degrees'
+        #     else:
+        #         guard_feedback += ', Back leg not at 45 degrees'
+        #
+        #     # Leg to shoulder width check
+        #     if check_leg_to_shoulder_width(frame_data):
+        #         guard_feedback += ', Legs at shoulder width'
+        #     else:
+        #         guard_feedback += ', Legs not at shoulder width'
+        #
+        #     # Head stability check
+        #     if check_head_stability(joints):
+        #         guard_feedback += ', Head stable'
+        #     else:
+        #         guard_feedback += ', Head not stable'
+        #
+        # else:
+        #     guard_feedback += 'Not in guard position'
+
+    # return json with stance and a score
+    return {"stance": stance, "score": '8'}
+
+
+def process_video(VIDEO_PATH):
+    # VIDEO_PATH = "examples/test16.mov"
     OUTPUT_PATH = "output/demo"
     CALIB_PATH = None
     ESTIMATE_LOCAL_ONLY = False
